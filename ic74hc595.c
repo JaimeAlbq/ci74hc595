@@ -57,20 +57,20 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
 	//configure GPIO with the given settings
 	gpio_config(&io_conf);
 
-	return 1;
+	return 0;
 }
 
 int8_t ic74hc595_send(uint8_t *data, uint8_t len, shift_reg_config_t *shft)
 {
 	if (len > shft->num_reg)
-                return -1;
+                return 1;
 
 	for (uint8_t i = 0; i < len; i++) {
 		ic74hc595_send8bits(data[i], shft);
 		shft->reg_value[i] = data[i];
 	}
 
-	return 1;
+	return 0;
 }
 
 int8_t ic74hc595_send8bits(uint8_t data, shift_reg_config_t *shft)
@@ -88,7 +88,7 @@ int8_t ic74hc595_send8bits(uint8_t data, shift_reg_config_t *shft)
 		_DELAY_US(1);
 	}
 
-	return 1;
+	return 0;
 }
 
 int8_t ic74hc595_latch(shift_reg_config_t *shft)
@@ -98,5 +98,5 @@ int8_t ic74hc595_latch(shift_reg_config_t *shft)
 	CLRPIN(shft->pin.latch);
 	_DELAY_US(1);
 
-	return 1;
+	return 0;
 }
