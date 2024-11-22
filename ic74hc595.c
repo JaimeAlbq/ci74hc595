@@ -17,7 +17,8 @@
 
 int8_t ic74hc595_init(shift_reg_config_t *shft)
 {
-	memset(shft->reg_value, 0, shft->num_reg);		// Start all registers as 0
+        // Start all registers as 0
+	memset(shft->reg_value, 0, shft->num_reg * sizeof(shft->reg_value[0]));
 
 	gpio_config_t io_conf;
 
