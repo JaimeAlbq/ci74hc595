@@ -17,6 +17,12 @@
 
 int8_t ic74hc595_init(shift_reg_config_t *shft)
 {
+        if (shft == NULL)
+                return 1;
+
+        if (shft->reg_value == NULL)
+                return 1;
+
         // Start all registers as 0
 	memset(shft->reg_value, 0, shft->num_reg * sizeof(shft->reg_value[0]));
 
@@ -62,6 +68,15 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
 
 int8_t ic74hc595_send(uint8_t *data, uint8_t len, shift_reg_config_t *shft)
 {
+        if (shft == NULL)
+                return 1;
+
+        if (shft->reg_value == NULL)
+                return 1;
+
+        if (data == NULL)
+                return 1;
+
 	if (len > shft->num_reg)
                 return 1;
 
@@ -75,6 +90,9 @@ int8_t ic74hc595_send(uint8_t *data, uint8_t len, shift_reg_config_t *shft)
 
 int8_t ic74hc595_send8bits(uint8_t data, shift_reg_config_t *shft)
 {
+        if (shft == NULL)
+                return 1;
+
 	for (int8_t i = 7; i >= 0; i--) {
 		if ((data >> i) & 1) {
 			SETPIN(shft->pin.signal);
@@ -93,6 +111,9 @@ int8_t ic74hc595_send8bits(uint8_t data, shift_reg_config_t *shft)
 
 int8_t ic74hc595_latch(shift_reg_config_t *shft)
 {
+        if (shft == NULL)
+                return 1;
+
 	SETPIN(shft->pin.latch);
 	_DELAY_US(1);
 	CLRPIN(shft->pin.latch);
