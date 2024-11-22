@@ -20,12 +20,12 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
 	shft->reg_value = (uint8_t *) malloc(shft->num_reg);	// Create an array with all registers
 	memset(shft->reg_value, 0, shft->num_reg);		// Start all registers as 0
 
-	gpio_config_t *io_conf = (gpio_config_t *) malloc(sizeof(gpio_config_t));
+	gpio_config_t io_conf;
 
 	//disable interrupt
-	io_conf->intr_type = GPIO_INTR_DISABLE;
+	io_conf.intr_type = GPIO_INTR_DISABLE;
 	//set as output mode
-	io_conf->mode = GPIO_MODE_OUTPUT;
+	io_conf.mode = GPIO_MODE_OUTPUT;
 	//bit mask of the pins that you want to set,e.g.GPIO18/19
 	{
 		uint32_t buf32_0 = 0;
@@ -49,16 +49,14 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
 
 		result = ((uint64_t)buf32_1 << 32) | ((uint64_t)buf32_0 << 0);
 
-		io_conf->pin_bit_mask = result;
+		io_conf.pin_bit_mask = result;
 	}
 	//disable pull-down mode
-	io_conf->pull_down_en = 0;
+	io_conf.pull_down_en = 0;
 	//disable pull-up mode
-	io_conf->pull_up_en = 0;
+	io_conf.pull_up_en = 0;
 	//configure GPIO with the given settings
-	gpio_config(io_conf);
-
-	free(io_conf);
+	gpio_config(&io_conf);
 
 	return 1;
 }
