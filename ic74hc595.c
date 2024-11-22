@@ -66,7 +66,7 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
 	return 0;
 }
 
-int8_t ic74hc595_send(shift_reg_config_t *shft, uint8_t *data, uint8_t len)
+int8_t ic74hc595_send(shift_reg_config_t *shft)
 {
         if (shft == NULL)
                 return 1;
@@ -74,15 +74,8 @@ int8_t ic74hc595_send(shift_reg_config_t *shft, uint8_t *data, uint8_t len)
         if (shft->reg_value == NULL)
                 return 1;
 
-        if (data == NULL)
-                return 1;
-
-	if (len > shft->num_reg)
-                return 1;
-
-	for (uint8_t i = 0; i < len; i++) {
-		ic74hc595_send8bits(data[i], shft);
-		shft->reg_value[i] = data[i];
+	for (uint8_t i = 0; i < shft->num_reg; i++) {
+		ic74hc595_send8bits(shft, shft->reg_value[i]);
 	}
 
 	return 0;
