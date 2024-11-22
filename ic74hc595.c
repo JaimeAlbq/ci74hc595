@@ -26,31 +26,30 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
 	io_conf.intr_type = GPIO_INTR_DISABLE;
 	//set as output mode
 	io_conf.mode = GPIO_MODE_OUTPUT;
+
 	//bit mask of the pins that you want to set,e.g.GPIO18/19
-	{
-		uint32_t buf32_0 = 0;
-		uint32_t buf32_1 = 0;
-		uint64_t result = 0;
+        uint32_t buf32_0 = 0;
+        uint32_t buf32_1 = 0;
+        uint64_t result = 0;
 
-		if (shft->pin.clk >= 32)
-			buf32_1 |= 1 << (shft->pin.clk - 32);
-		else
-			buf32_0 |= 1 << shft->pin.clk;
+        if (shft->pin.clk >= 32)
+                buf32_1 |= 1 << (shft->pin.clk - 32);
+        else
+                buf32_0 |= 1 << shft->pin.clk;
 
-		if (shft->pin.latch >= 32)
-			buf32_1 |= 1 << (shft->pin.latch - 32);
-		else
-			buf32_0 |= 1 << shft->pin.latch;
+        if (shft->pin.latch >= 32)
+                buf32_1 |= 1 << (shft->pin.latch - 32);
+        else
+                buf32_0 |= 1 << shft->pin.latch;
 
-		if (shft->pin.signal >= 32)
-			buf32_1 |= 1 << (shft->pin.signal - 32);
-		else
-			buf32_0 |= 1 << shft->pin.signal;
+        if (shft->pin.signal >= 32)
+                buf32_1 |= 1 << (shft->pin.signal - 32);
+        else
+                buf32_0 |= 1 << shft->pin.signal;
 
-		result = ((uint64_t)buf32_1 << 32) | ((uint64_t)buf32_0 << 0);
+        result = ((uint64_t)buf32_1 << 32) | ((uint64_t)buf32_0 << 0);
+        io_conf.pin_bit_mask = result;
 
-		io_conf.pin_bit_mask = result;
-	}
 	//disable pull-down mode
 	io_conf.pull_down_en = 0;
 	//disable pull-up mode
@@ -63,7 +62,8 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
 
 int8_t ic74hc595_send(uint8_t *data, uint8_t len, shift_reg_config_t *shft)
 {
-	if (len > shft->num_reg) return -1;
+	if (len > shft->num_reg)
+                return -1;
 
 	for (uint8_t i = 0; i < len; i++) {
 		ic74hc595_send8bits(data[i], shft);
