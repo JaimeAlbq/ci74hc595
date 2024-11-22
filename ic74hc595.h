@@ -16,8 +16,6 @@
 #include <stdint.h>
 #include <string.h>
 
-#if defined(IDF_VER) // Settings for ESP-IDF
-
 #include "driver/gpio.h"
 #include "esp32/rom/ets_sys.h"
 
@@ -25,25 +23,15 @@
 #define CLRPIN(PIN)     gpio_set_level(PIN, 0)
 #define _DELAY_US(x)    ets_delay_us(x)
 
-#endif // IDF_VER
-
 typedef struct {
 	uint8_t num_reg;	// Number of shift registers
 	uint8_t *reg_value;	// Last value of all registers
 
 	// GPIO
 	struct pin {
-		
-#if defined(IDF_VER)
 		gpio_num_t clk;
 		gpio_num_t signal;
 		gpio_num_t latch;
-#else // IDF_VER
-		uint8_t clk;
-		uint8_t signal;
-		uint8_t latch;
-#endif // Generic
-
 	} pin;
 } shift_reg_config_t;
 
