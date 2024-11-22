@@ -17,7 +17,6 @@
 
 int8_t ic74hc595_init(shift_reg_config_t *shft)
 {
-	shft->reg_value = (uint8_t *) malloc(shft->num_reg);	// Create an array with all registers
 	memset(shft->reg_value, 0, shft->num_reg);		// Start all registers as 0
 
 	gpio_config_t io_conf;
@@ -57,13 +56,6 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
 	io_conf.pull_up_en = 0;
 	//configure GPIO with the given settings
 	gpio_config(&io_conf);
-
-	return 1;
-}
-
-int8_t ic74hc595_deinit(shift_reg_config_t *shft)
-{
-	free(shft->reg_value);
 
 	return 1;
 }

@@ -40,14 +40,6 @@ typedef struct {
 int8_t ic74hc595_init(shift_reg_config_t *shft);
 
 /**
- * @brief
- * 
- * @param shft 
- * @return int8_t 
- */
-int8_t ic74hc595_deinit(shift_reg_config_t *shft);
-
-/**
  * @brief Send the whole data
  * 
  * @param data 
