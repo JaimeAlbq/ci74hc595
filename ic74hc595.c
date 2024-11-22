@@ -9,11 +9,13 @@
  * 
  */
 
+#include <unistd.h>
+
 #include "ic74hc595.h"
 
 #define SETPIN(PIN)     gpio_set_level(PIN, 1)
 #define CLRPIN(PIN)     gpio_set_level(PIN, 0)
-#define _DELAY_US(x)    ets_delay_us(x)
+#define _DELAY_US(x)    usleep(x)
 
 int8_t ic74hc595_init(shift_reg_config_t *shft)
 {

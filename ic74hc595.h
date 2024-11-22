@@ -17,7 +17,6 @@
 #include <string.h>
 
 #include "driver/gpio.h"
-#include "esp32/rom/ets_sys.h"
 
 typedef struct {
 	uint8_t num_reg;	// Number of shift registers
