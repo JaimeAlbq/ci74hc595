@@ -19,10 +19,6 @@
 #include "driver/gpio.h"
 #include "esp32/rom/ets_sys.h"
 
-#define SETPIN(PIN)     gpio_set_level(PIN, 1)
-#define CLRPIN(PIN)     gpio_set_level(PIN, 0)
-#define _DELAY_US(x)    ets_delay_us(x)
-
 typedef struct {
 	uint8_t num_reg;	// Number of shift registers
 	uint8_t *reg_value;	// Last value of all registers
