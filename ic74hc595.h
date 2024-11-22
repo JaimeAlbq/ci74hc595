@@ -47,7 +47,7 @@ int8_t ic74hc595_init(shift_reg_config_t *shft);
  * @param shft 
  * @return -1 = data longer than number of registers; 1 = successfully sent
  */
-int8_t ic74hc595_send(uint8_t *data, uint8_t len, shift_reg_config_t *shft);
+int8_t ic74hc595_send(shift_reg_config_t *shft, uint8_t *data, uint8_t len);
 
 /**
  * @brief Send 1 byte at a time
@@ -56,7 +56,7 @@ int8_t ic74hc595_send(uint8_t *data, uint8_t len, shift_reg_config_t *shft);
  * @param shft 
  * @return int8_t 
  */
-int8_t ic74hc595_send8bits(uint8_t data, shift_reg_config_t *shft);
+int8_t ic74hc595_send8bits(shift_reg_config_t *shft, uint8_t data);
 
 /**
  * @brief Latch the registers
