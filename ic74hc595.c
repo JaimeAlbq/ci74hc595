@@ -78,6 +78,8 @@ int8_t ic74hc595_send(shift_reg_config_t *shft)
 		ic74hc595_send8bits(shft, shft->reg_value[i]);
 	}
 
+        ic74hc595_latch(shft);
+
 	return 0;
 }
 
