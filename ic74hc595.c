@@ -22,12 +22,6 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
         if (shft == NULL)
                 return 1;
 
-        if (shft->reg_value == NULL)
-                return 1;
-
-        // Start all registers as 0
-	memset(shft->reg_value, 0, shft->num_reg * sizeof(shft->reg_value[0]));
-
 	gpio_config_t io_conf;
 
 	//disable interrupt
