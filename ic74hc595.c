@@ -27,6 +27,7 @@ int8_t ic74hc595_init(ic74hc595_t *ic74hc595)
         for (int i = 0; i < sizeof(pins) / sizeof(pins[0]); i++) {
                 gpio_set_direction(pins[i], GPIO_MODE_OUTPUT);
                 gpio_set_pull_mode(pins[i], GPIO_PULLDOWN_ONLY);
+                gpio_set_level(pins[i], 0);
         }
 
 	return 0;
