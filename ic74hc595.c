@@ -55,12 +55,9 @@ int8_t ic74hc595_send8bits(ic74hc595_t *ic74hc595, uint8_t data)
                 return 1;
 
 	for (int8_t i = 7; i >= 0; i--) {
-		if ((data >> i) & 1) {
-			gpio_set_level(ic74hc595->signal_pin, 1);
-		} else {
-			gpio_set_level(ic74hc595->signal_pin, 0);
-		}
+		uint8_t bit = (data >> i) & 1;
 
+                gpio_set_level(ic74hc595->signal_pin, bit);
                 gpio_set_level(ic74hc595->clock_pin, 1);
 		usleep(1);
                 gpio_set_level(ic74hc595->clock_pin, 0);
