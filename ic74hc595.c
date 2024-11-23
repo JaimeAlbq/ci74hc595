@@ -34,20 +34,20 @@ int8_t ic74hc595_init(ic74hc595_t *ic74hc595)
         uint32_t buf32_1 = 0;
         uint64_t result = 0;
 
-        if (ic74hc595->pin.clk >= 32)
-                buf32_1 |= 1 << (ic74hc595->pin.clk - 32);
+        if (ic74hc595->clock_pin >= 32)
+                buf32_1 |= 1 << (ic74hc595->clock_pin - 32);
         else
-                buf32_0 |= 1 << ic74hc595->pin.clk;
+                buf32_0 |= 1 << ic74hc595->clock_pin;
 
         if (ic74hc595->pin.latch >= 32)
-                buf32_1 |= 1 << (ic74hc595->pin.latch - 32);
+                buf32_1 |= 1 << (ic74hc595->latch_pin - 32);
         else
-                buf32_0 |= 1 << ic74hc595->pin.latch;
+                buf32_0 |= 1 << ic74hc595->latch_pin;
 
-        if (ic74hc595->pin.signal >= 32)
-                buf32_1 |= 1 << (ic74hc595->pin.signal - 32);
+        if (ic74hc595->signal_pin >= 32)
+                buf32_1 |= 1 << (ic74hc595->signal_pin - 32);
         else
-                buf32_0 |= 1 << ic74hc595->pin.signal;
+                buf32_0 |= 1 << ic74hc595->signal_pin;
 
         result = ((uint64_t)buf32_1 << 32) | ((uint64_t)buf32_0 << 0);
         io_conf.pin_bit_mask = result;
@@ -67,11 +67,11 @@ int8_t ic74hc595_send(ic74hc595_t *ic74hc595)
         if (ic74hc595 == NULL)
                 return 1;
 
-        if (ic74hc595->reg_value == NULL)
+        if (ic74hc595->bits == NULL)
                 return 1;
 
-	for (uint8_t i = 0; i < ic74hc595->num_reg; i++) {
-		ic74hc595_send8bits(ic74hc595, ic74hc595->reg_value[i]);
+	for (uint8_t i = 0; i < ic74hc595->count; i++) {
+		ic74hc595_send8bits(ic74hc595, ic74hc595->bits[i]);
 	}
 
         ic74hc595_latch(ic74hc595);
@@ -86,14 +86,14 @@ int8_t ic74hc595_send8bits(ic74hc595_t *ic74hc595, uint8_t data)
 
 	for (int8_t i = 7; i >= 0; i--) {
 		if ((data >> i) & 1) {
-			SETPIN(ic74hc595->pin.signal);
+			SETPIN(ic74hc595->signal_pin);
 		} else {
-			CLRPIN(ic74hc595->pin.signal);
+			CLRPIN(ic74hc595->signal_pin);
 		}
 
-		SETPIN(ic74hc595->pin.clk);
+		SETPIN(ic74hc595->clock_pin);
 		_DELAY_US(1);
-		CLRPIN(ic74hc595->pin.clk);
+		CLRPIN(ic74hc595->clock_pin);
 		_DELAY_US(1);
 	}
 
@@ -105,9 +105,9 @@ int8_t ic74hc595_latch(ic74hc595_t *ic74hc595)
         if (ic74hc595 == NULL)
                 return 1;
 
-	SETPIN(ic74hc595->pin.latch);
+	SETPIN(ic74hc595->latch_pin);
 	_DELAY_US(1);
-	CLRPIN(ic74hc595->pin.latch);
+	CLRPIN(ic74hc595->latch_pin);
 	_DELAY_US(1);
 
 	return 0;

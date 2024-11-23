@@ -19,15 +19,13 @@
 #include "driver/gpio.h"
 
 typedef struct {
-	uint8_t num_reg;	// Number of shift registers
-	uint8_t *reg_value;	// Last value of all registers
+        int count;	// Number of shift registers
+	uint8_t *bits;	// Last value of all registers
 
 	// GPIO
-	struct pin {
-		gpio_num_t clk;
-		gpio_num_t signal;
-		gpio_num_t latch;
-	} pin;
+        gpio_num_t clock_pin;
+        gpio_num_t signal_pin;
+        gpio_num_t latch_pin;
 } ic74hc595_t;
 
 /**
