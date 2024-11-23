@@ -18,42 +18,16 @@ int8_t ic74hc595_init(ic74hc595_t *ic74hc595)
         if (ic74hc595 == NULL)
                 return 1;
 
-	gpio_config_t io_conf;
+        const gpio_num_t pins[] = {
+                ic74hc595->signal_pin,
+                ic74hc595->clock_pin,
+                ic74hc595->latch_pin
+        };
 
-	//disable interrupt
-	io_conf.intr_type = GPIO_INTR_DISABLE;
-	//set as output mode
-	io_conf.mode = GPIO_MODE_OUTPUT;
-
-	//bit mask of the pins that you want to set,e.g.GPIO18/19
-        uint32_t buf32_0 = 0;
-        uint32_t buf32_1 = 0;
-        uint64_t result = 0;
-
-        if (ic74hc595->clock_pin >= 32)
-                buf32_1 |= 1 << (ic74hc595->clock_pin - 32);
-        else
-                buf32_0 |= 1 << ic74hc595->clock_pin;
-
-        if (ic74hc595->pin.latch >= 32)
-                buf32_1 |= 1 << (ic74hc595->latch_pin - 32);
-        else
-                buf32_0 |= 1 << ic74hc595->latch_pin;
-
-        if (ic74hc595->signal_pin >= 32)
-                buf32_1 |= 1 << (ic74hc595->signal_pin - 32);
-        else
-                buf32_0 |= 1 << ic74hc595->signal_pin;
-
-        result = ((uint64_t)buf32_1 << 32) | ((uint64_t)buf32_0 << 0);
-        io_conf.pin_bit_mask = result;
-
-	//disable pull-down mode
-	io_conf.pull_down_en = 0;
-	//disable pull-up mode
-	io_conf.pull_up_en = 0;
-	//configure GPIO with the given settings
-	gpio_config(&io_conf);
+        for (int i = 0; i < sizeof(pins) / sizeof(pins[0]); i++) {
+                gpio_set_direction(pins[i], GPIO_MODE_OUTPUT);
+                gpio_set_pull_mode(pins[i], GPIO_PULLDOWN_ONLY);
+        }
 
 	return 0;
 }
