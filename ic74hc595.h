@@ -28,7 +28,7 @@ typedef struct {
 		gpio_num_t signal;
 		gpio_num_t latch;
 	} pin;
-} shift_reg_config_t;
+} ic74hc595_t;
 
 /**
  * @brief Initialize the microcontroller to do the output
@@ -36,7 +36,7 @@ typedef struct {
  * @param shft 
  * @return < 0 means error
  */
-int8_t ic74hc595_init(shift_reg_config_t *shft);
+int8_t ic74hc595_init(ic74hc595_t *ic74hc595);
 
 /**
  * @brief Send the whole data
@@ -46,7 +46,7 @@ int8_t ic74hc595_init(shift_reg_config_t *shft);
  * @param shft 
  * @return -1 = data longer than number of registers; 1 = successfully sent
  */
-int8_t ic74hc595_send(shift_reg_config_t *shft);
+int8_t ic74hc595_send(ic74hc595_t *ic74hc595);
 
 /**
  * @brief Send 1 byte at a time
@@ -55,7 +55,7 @@ int8_t ic74hc595_send(shift_reg_config_t *shft);
  * @param shft 
  * @return int8_t 
  */
-int8_t ic74hc595_send8bits(shift_reg_config_t *shft, uint8_t data);
+int8_t ic74hc595_send8bits(ic74hc595_t *ic74hc595, uint8_t data);
 
 /**
  * @brief Latch the registers
@@ -63,6 +63,6 @@ int8_t ic74hc595_send8bits(shift_reg_config_t *shft, uint8_t data);
  * @param shft 
  * @return int8_t 
  */
-int8_t ic74hc595_latch(shift_reg_config_t *shft);
+int8_t ic74hc595_latch(ic74hc595_t *ic74hc595);
 
 #endif // _IC74HC595_H_

@@ -17,9 +17,9 @@
 #define CLRPIN(PIN)     gpio_set_level(PIN, 0)
 #define _DELAY_US(x)    usleep(x)
 
-int8_t ic74hc595_init(shift_reg_config_t *shft)
+int8_t ic74hc595_init(ic74hc595_t *ic74hc595)
 {
-        if (shft == NULL)
+        if (ic74hc595 == NULL)
                 return 1;
 
 	gpio_config_t io_conf;
@@ -34,20 +34,20 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
         uint32_t buf32_1 = 0;
         uint64_t result = 0;
 
-        if (shft->pin.clk >= 32)
-                buf32_1 |= 1 << (shft->pin.clk - 32);
+        if (ic74hc595->pin.clk >= 32)
+                buf32_1 |= 1 << (ic74hc595->pin.clk - 32);
         else
-                buf32_0 |= 1 << shft->pin.clk;
+                buf32_0 |= 1 << ic74hc595->pin.clk;
 
-        if (shft->pin.latch >= 32)
-                buf32_1 |= 1 << (shft->pin.latch - 32);
+        if (ic74hc595->pin.latch >= 32)
+                buf32_1 |= 1 << (ic74hc595->pin.latch - 32);
         else
-                buf32_0 |= 1 << shft->pin.latch;
+                buf32_0 |= 1 << ic74hc595->pin.latch;
 
-        if (shft->pin.signal >= 32)
-                buf32_1 |= 1 << (shft->pin.signal - 32);
+        if (ic74hc595->pin.signal >= 32)
+                buf32_1 |= 1 << (ic74hc595->pin.signal - 32);
         else
-                buf32_0 |= 1 << shft->pin.signal;
+                buf32_0 |= 1 << ic74hc595->pin.signal;
 
         result = ((uint64_t)buf32_1 << 32) | ((uint64_t)buf32_0 << 0);
         io_conf.pin_bit_mask = result;
@@ -62,52 +62,52 @@ int8_t ic74hc595_init(shift_reg_config_t *shft)
 	return 0;
 }
 
-int8_t ic74hc595_send(shift_reg_config_t *shft)
+int8_t ic74hc595_send(ic74hc595_t *ic74hc595)
 {
-        if (shft == NULL)
+        if (ic74hc595 == NULL)
                 return 1;
 
-        if (shft->reg_value == NULL)
+        if (ic74hc595->reg_value == NULL)
                 return 1;
 
-	for (uint8_t i = 0; i < shft->num_reg; i++) {
-		ic74hc595_send8bits(shft, shft->reg_value[i]);
+	for (uint8_t i = 0; i < ic74hc595->num_reg; i++) {
+		ic74hc595_send8bits(ic74hc595, ic74hc595->reg_value[i]);
 	}
 
-        ic74hc595_latch(shft);
+        ic74hc595_latch(ic74hc595);
 
 	return 0;
 }
 
-int8_t ic74hc595_send8bits(shift_reg_config_t *shft, uint8_t data)
+int8_t ic74hc595_send8bits(ic74hc595_t *ic74hc595, uint8_t data)
 {
-        if (shft == NULL)
+        if (ic74hc595 == NULL)
                 return 1;
 
 	for (int8_t i = 7; i >= 0; i--) {
 		if ((data >> i) & 1) {
-			SETPIN(shft->pin.signal);
+			SETPIN(ic74hc595->pin.signal);
 		} else {
-			CLRPIN(shft->pin.signal);
+			CLRPIN(ic74hc595->pin.signal);
 		}
 
-		SETPIN(shft->pin.clk);
+		SETPIN(ic74hc595->pin.clk);
 		_DELAY_US(1);
-		CLRPIN(shft->pin.clk);
+		CLRPIN(ic74hc595->pin.clk);
 		_DELAY_US(1);
 	}
 
 	return 0;
 }
 
-int8_t ic74hc595_latch(shift_reg_config_t *shft)
+int8_t ic74hc595_latch(ic74hc595_t *ic74hc595)
 {
-        if (shft == NULL)
+        if (ic74hc595 == NULL)
                 return 1;
 
-	SETPIN(shft->pin.latch);
+	SETPIN(ic74hc595->pin.latch);
 	_DELAY_US(1);
-	CLRPIN(shft->pin.latch);
+	CLRPIN(ic74hc595->pin.latch);
 	_DELAY_US(1);
 
 	return 0;
