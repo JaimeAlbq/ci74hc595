@@ -13,10 +13,6 @@
 
 #include "ic74hc595.h"
 
-#define SETPIN(PIN)     gpio_set_level(PIN, 1)
-#define CLRPIN(PIN)     gpio_set_level(PIN, 0)
-#define _DELAY_US(x)    usleep(x)
-
 int8_t ic74hc595_init(ic74hc595_t *ic74hc595)
 {
         if (ic74hc595 == NULL)
@@ -86,15 +82,15 @@ int8_t ic74hc595_send8bits(ic74hc595_t *ic74hc595, uint8_t data)
 
 	for (int8_t i = 7; i >= 0; i--) {
 		if ((data >> i) & 1) {
-			SETPIN(ic74hc595->signal_pin);
+			gpio_set_level(ic74hc595->signal_pin, 1);
 		} else {
-			CLRPIN(ic74hc595->signal_pin);
+			gpio_set_level(ic74hc595->signal_pin, 0);
 		}
 
-		SETPIN(ic74hc595->clock_pin);
-		_DELAY_US(1);
-		CLRPIN(ic74hc595->clock_pin);
-		_DELAY_US(1);
+                gpio_set_level(ic74hc595->clock_pin, 1);
+		usleep(1);
+                gpio_set_level(ic74hc595->clock_pin, 0);
+		usleep(1);
 	}
 
 	return 0;
@@ -105,10 +101,10 @@ int8_t ic74hc595_latch(ic74hc595_t *ic74hc595)
         if (ic74hc595 == NULL)
                 return 1;
 
-	SETPIN(ic74hc595->latch_pin);
-	_DELAY_US(1);
-	CLRPIN(ic74hc595->latch_pin);
-	_DELAY_US(1);
+        gpio_set_level(ic74hc595->latch_pin, 1);
+	usleep(1);
+        gpio_set_level(ic74hc595->latch_pin, 0);
+	usleep(1);
 
 	return 0;
 }
