@@ -18,11 +18,16 @@
 
 #include "driver/gpio.h"
 
+#define IC74HC595_SEND_MODE_MSB_FIRST 0
+#define IC74HC595_SEND_MODE_LSB_FIRST 1
+
 typedef struct {
 	// GPIO
         gpio_num_t clock_pin;
         gpio_num_t signal_pin;
         gpio_num_t latch_pin;
+
+        int send_mode;
 } ic74hc595_t;
 
 /**

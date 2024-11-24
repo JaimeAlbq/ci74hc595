@@ -58,8 +58,14 @@ int8_t ic74hc595_send8bits(ic74hc595_t *ic74hc595, uint8_t data)
         if (ic74hc595 == NULL)
                 return 1;
 
-	for (int8_t i = 7; i >= 0; i--) {
-		uint8_t bit = (data >> i) & 1;
+	for (int8_t i = 0; i < 8; i++) {
+		uint8_t bit;
+
+                if (ic74hc595->send_mode == IC74HC595_SEND_MODE_LSB_FIRST) {
+                        bit = ((0x01U & (data >> i)) == 0x01U); // LSB first
+                } else { // default
+                        bit = ((0x80U & (data << i)) == 0x80U); // MSB first
+                }
 
                 gpio_set_level(ic74hc595->signal_pin, bit);
                 gpio_set_level(ic74hc595->clock_pin, 1);
