@@ -63,7 +63,6 @@ int8_t ic74hc595_send8bits(ic74hc595_t *ic74hc595, uint8_t data)
 		usleep(1);
                 gpio_set_level(ic74hc595->signal_pin, 0);
                 gpio_set_level(ic74hc595->clock_pin, 0);
-		usleep(1);
 	}
 
 	return 0;
@@ -77,7 +76,6 @@ int8_t ic74hc595_latch(ic74hc595_t *ic74hc595)
         gpio_set_level(ic74hc595->latch_pin, 1);
 	usleep(1);
         gpio_set_level(ic74hc595->latch_pin, 0);
-	usleep(1);
 
 	return 0;
 }
