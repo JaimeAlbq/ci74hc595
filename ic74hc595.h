@@ -19,9 +19,6 @@
 #include "driver/gpio.h"
 
 typedef struct {
-        int count;	// Number of shift registers
-	uint8_t *bits;	// Last value of all registers
-
 	// GPIO
         gpio_num_t clock_pin;
         gpio_num_t signal_pin;
@@ -44,7 +41,7 @@ int8_t ic74hc595_init(ic74hc595_t *ic74hc595);
  * @param shft 
  * @return -1 = data longer than number of registers; 1 = successfully sent
  */
-int8_t ic74hc595_send(ic74hc595_t *ic74hc595);
+int8_t ic74hc595_send(ic74hc595_t *ic74hc595, uint8_t *data, size_t len);
 
 /**
  * @brief Send 1 byte at a time

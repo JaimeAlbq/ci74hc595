@@ -33,16 +33,19 @@ int8_t ic74hc595_init(ic74hc595_t *ic74hc595)
 	return 0;
 }
 
-int8_t ic74hc595_send(ic74hc595_t *ic74hc595)
+int8_t ic74hc595_send(ic74hc595_t *ic74hc595, uint8_t *data, size_t len)
 {
         if (ic74hc595 == NULL)
                 return 1;
 
-        if (ic74hc595->bits == NULL)
+        if (data == NULL)
                 return 1;
 
-	for (uint8_t i = 0; i < ic74hc595->count; i++) {
-		ic74hc595_send8bits(ic74hc595, ic74hc595->bits[i]);
+        if (len < 1)
+                return 1;
+
+	for (uint8_t i = 0; i < len; i++) {
+		ic74hc595_send8bits(ic74hc595, data[i]);
 	}
 
         ic74hc595_latch(ic74hc595);
