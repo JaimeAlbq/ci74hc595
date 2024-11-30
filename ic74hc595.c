@@ -44,7 +44,7 @@ int8_t ic74hc595_send(ic74hc595_t *ic74hc595, uint8_t *data, size_t len)
         if (len < 1)
                 return 1;
 
-	for (uint8_t i = 0; i < len; i++) {
+	for (size_t i = 0; i < len; i++) {
 		ic74hc595_send8bits(ic74hc595, data[i]);
 	}
 
