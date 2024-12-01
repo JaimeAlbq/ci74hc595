@@ -12,10 +12,6 @@
 #ifndef IC74HC595_H
 #define IC74HC595_H
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-
 #include "driver/gpio.h"
 
 #ifdef __cplusplus
@@ -35,7 +31,7 @@ typedef struct {
 
 int8_t ic74hc595_init(ic74hc595_t *ic74hc595);
 
-int8_t ic74hc595_send(ic74hc595_t *ic74hc595, uint8_t *data, size_t len);
+int ic74hc595_send(ic74hc595_t *ic74hc595, uint8_t *data, size_t len);
 
 int8_t ic74hc595_send8bits(ic74hc595_t *ic74hc595, uint8_t data);
 
