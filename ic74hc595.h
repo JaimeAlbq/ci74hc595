@@ -9,85 +9,37 @@
  * 
  */
 
-#if !defined(_IC74HC595_H_)
-#define _IC74HC595_H_
-
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-
-#if defined(IDF_VER) // Settings for ESP-IDF
+#ifndef IC74HC595_H
+#define IC74HC595_H
 
 #include "driver/gpio.h"
-#include "esp32/rom/ets_sys.h"
 
-#define SETPIN(PIN)     gpio_set_level(PIN, 1)
-#define CLRPIN(PIN)     gpio_set_level(PIN, 0)
-#define _DELAY_US(x)    ets_delay_us(x)
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#endif // IDF_VER
+#define IC74HC595_SEND_MODE_MSB_FIRST 0
+#define IC74HC595_SEND_MODE_LSB_FIRST 1
 
 typedef struct {
-	uint8_t num_reg;	// Number of shift registers
-	uint8_t *reg_value;	// Last value of all registers
+        gpio_num_t clock_pin;
+        gpio_num_t signal_pin;
+        gpio_num_t latch_pin;
 
-	// GPIO
-	struct pin {
-		
-#if defined(IDF_VER)
-		gpio_num_t clk;
-		gpio_num_t signal;
-		gpio_num_t latch;
-#else // IDF_VER
-		uint8_t clk;
-		uint8_t signal;
-		uint8_t latch;
-#endif // Generic
+        uint8_t send_mode;
+} ic74hc595_t;
 
-	} pin;
-} shift_reg_config_t;
+int8_t ic74hc595_init(ic74hc595_t *ic74hc595);
 
-/**
- * @brief Initialize the microcontroller to do the output
- * 
- * @param shft 
- * @return < 0 means error
- */
-int8_t ic74hc595_init(shift_reg_config_t *shft);
+int ic74hc595_send(ic74hc595_t *ic74hc595, uint8_t *data, size_t len);
 
-/**
- * @brief
- * 
- * @param shft 
- * @return int8_t 
- */
-int8_t ic74hc595_deinit(shift_reg_config_t *shft);
+int8_t ic74hc595_send8bits(ic74hc595_t *ic74hc595, uint8_t data);
 
-/**
- * @brief Send the whole data
- * 
- * @param data 
- * @param len 
- * @param shft 
- * @return -1 = data longer than number of registers; 1 = successfully sent
- */
-int8_t ic74hc595_send(uint8_t *data, uint8_t len, shift_reg_config_t *shft);
+int8_t ic74hc595_latch(ic74hc595_t *ic74hc595);
 
-/**
- * @brief Send 1 byte at a time
- * 
- * @param data 
- * @param shft 
- * @return int8_t 
- */
-int8_t ic74hc595_send8bits(uint8_t data, shift_reg_config_t *shft);
+#ifdef __cplusplus
+}
+#endif
 
-/**
- * @brief Latch the registers
- * 
- * @param shft 
- * @return int8_t 
- */
-int8_t ic74hc595_latch(shift_reg_config_t *shft);
+#endif /* IC74HC595_H */
 
-#endif // _IC74HC595_H_
